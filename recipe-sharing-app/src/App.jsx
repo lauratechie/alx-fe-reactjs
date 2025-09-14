@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
 import RecipeList from './components/RecipeList';
 import AddRecipeForm from './components/AddRecipeForm';
 import RecipeDetails from './components/RecipeDetails';
+import SearchBar from './components/SearchBar';
 
 function App() {
   return (
@@ -14,18 +15,16 @@ function App() {
         </nav>
 
         <Routes>
-          {/* Home page → add + list */}
           <Route
             path="/"
             element={
               <div>
                 <AddRecipeForm />
+                <SearchBar />
                 <RecipeList />
               </div>
             }
           />
-
-          {/* Details page → show one recipe */}
           <Route path="/recipes/:id" element={<RecipeDetails />} />
         </Routes>
       </div>
