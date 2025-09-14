@@ -1,3 +1,4 @@
+import Counter from './components/Counter';
 import Header from './components/Header';
 import MainContent from './components/MainContent';
 import Footer from './components/Footer';
@@ -8,6 +9,7 @@ function App() {
     <div>
       <Header />
       <MainContent />
+
       {/* Example usage of UserProfile with props */}
       <UserProfile 
         name="Alice" 
@@ -19,6 +21,10 @@ function App() {
         age="30" 
         bio="Enjoys coding and traveling" 
       />
+
+      {/* Add the Counter component here */}
+      <Counter />
+
       <Footer />
     </div>
   );
