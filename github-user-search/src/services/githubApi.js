@@ -1,17 +1,18 @@
+// src/services/githubApi.js
 import axios from "axios";
 
 const API_URL = "https://api.github.com/users/";
 
-export const fetchUser = async (username) => {
+export async function fetchUser(username) {
+  const token = import.meta.env.VITE_APP_GITHUB_API_KEY;
   try {
-    const response = await axios.get(`${API_URL}${username}`, {
-      headers: {
-        Authorization: `token ${import.meta.env.VITE_APP_GITHUB_API_KEY}`,
-      },
+    const res = await axios.get(`${API_URL}${username}`, {
+      headers: token ? { Authorization: `token ${token}` } : {},
     });
-    return response.data;
-  } catch (error) {
-    console.error("Error fetching user:", error);
-    return null;
+    return res.data;
+  } catch (err) {
+    if (err.response && err.response.status === 404) return null;
+    console.error("GitHub API error:", err);
+    throw err;
   }
-};
+}
