@@ -1,8 +1,8 @@
 // src/components/Search.jsx
 import { useState } from "react";
-import { fetchUser } from "../services/githubApi";
+import { fetchUserData } from "../services/githubService"; // ✅ exact import
 
-export default function Search() {
+function Search() {
   const [username, setUsername] = useState("");
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -10,22 +10,20 @@ export default function Search() {
 
   const handleSearch = async (e) => {
     if (e) e.preventDefault();
-    const name = username.trim();
-    if (!name) return;
+    if (!username.trim()) return;
 
     setLoading(true);
     setError("");
     setUser(null);
 
     try {
-      const data = await fetchUser(name);
+      const data = await fetchUserData(username); // ✅ exact call
       if (data) {
         setUser(data);
       } else {
-        // EXACT expected message (no apostrophe)
         setError("Looks like we cant find the user");
       }
-    } catch (err) {
+    } catch {
       setError("Looks like we cant find the user");
     } finally {
       setLoading(false);
@@ -33,23 +31,21 @@ export default function Search() {
   };
 
   return (
-    <div style={{ padding: 12 }}>
-      <form onSubmit={handleSearch} style={{ marginBottom: 12 }}>
+    <div>
+      <form onSubmit={handleSearch}>
         <input
           type="text"
           placeholder="Enter GitHub username"
           value={username}
           onChange={(e) => setUsername(e.target.value)}
-          style={{ padding: 8, marginRight: 8 }}
         />
         <button type="submit">Search</button>
       </form>
 
       {loading && <p>Loading...</p>}
-      {error && <p style={{ color: "red" }}>{error}</p>}
-
+      {error && <p>{error}</p>}
       {user && (
-        <div style={{ marginTop: 12 }}>
+        <div>
           <img src={user.avatar_url} alt={user.login} width="100" />
           <h2>{user.name || user.login}</h2>
           <p>{user.bio}</p>
@@ -61,3 +57,5 @@ export default function Search() {
     </div>
   );
 }
+
+export default Search;
