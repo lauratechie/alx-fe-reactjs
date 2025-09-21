@@ -1,13 +1,14 @@
 import { useState } from "react";
-import { fetchUserData } from "./services/githubService";
+import { fetchUserData } from "../services/githubService";
 
-function App() {
+function Search() {
   const [username, setUsername] = useState("");
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
-  const handleSearch = async () => {
+  const handleSubmit = async (e) => {
+    e.preventDefault();
     if (!username.trim()) return;
 
     setLoading(true);
@@ -29,10 +30,8 @@ function App() {
   };
 
   return (
-    <div style={{ padding: "20px", fontFamily: "Arial, sans-serif" }}>
-      <h1>GitHub User Search</h1>
-
-      <div style={{ marginBottom: "20px" }}>
+    <div style={{ padding: "20px" }}>
+      <form onSubmit={handleSubmit} style={{ marginBottom: "20px" }}>
         <input
           type="text"
           placeholder="Enter GitHub username"
@@ -40,29 +39,21 @@ function App() {
           onChange={(e) => setUsername(e.target.value)}
           style={{ padding: "8px", marginRight: "10px" }}
         />
-        <button onClick={handleSearch}>Search</button>
-      </div>
+        <button type="submit">Search</button>
+      </form>
 
       {/* Conditional Rendering */}
       {loading && <p>Loading...</p>}
       {error && <p style={{ color: "red" }}>{error}</p>}
       {user && (
-        <div style={{ marginTop: "20px" }}>
-          <img
-            src={user.avatar_url}
-            alt={user.login}
-            width="100"
-            style={{ borderRadius: "50%" }}
-          />
+        <div>
+          <img src={user.avatar_url} alt={user.login} width="100" />
           <h2>{user.name || user.login}</h2>
-          <p>{user.bio}</p>
-          <a href={user.html_url} target="_blank" rel="noreferrer">
-            Visit Profile
-          </a>
+          <a href={user.html_url} target="_blank">Visit Profile</a>
         </div>
       )}
     </div>
   );
 }
 
-export default App;
+export default Search;
